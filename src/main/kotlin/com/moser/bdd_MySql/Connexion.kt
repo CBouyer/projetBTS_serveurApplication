@@ -5,7 +5,7 @@ import java.util.*
 
 class Connexion(url:String, username:String, password:String) {
 
-    private lateinit var conn: Connection
+    private var conn: Connection? = null
     private val url=url
     private val username =username
     private val password = password
@@ -19,7 +19,7 @@ class Connexion(url:String, username:String, password:String) {
         }
         try {
             conn = DriverManager.getConnection(url,username,password)
-            println("connexion OK")
+            println("connexion OK a la bdd")
         } catch (ex: SQLException) {
             println("erreur de connexion à la bdd")
         }
@@ -27,11 +27,11 @@ class Connexion(url:String, username:String, password:String) {
 
 
     fun fermerConnexion(){
-        conn.close()
+        conn?.close()
     }
 
     fun getConnexion():Connection{
-        return conn
+        return conn ?: throw IllegalStateException("Connexion non établie")
     }
 
 

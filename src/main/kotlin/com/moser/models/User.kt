@@ -1,13 +1,18 @@
-package com.michael.models
+package com.moser.models
 
-import com.michael.validityInMs
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SendToken(
-    val id_user: Int,
-    val username: String,
-    val role: String,
-    val token: String,
-    val tokenTimeValid: Int = validityInMs,
-)
+data class User(
+    val idadmin: Int? = null,
+    val username: String? = null,
+    val password: String? = null,
+    val role: String? = null,
+    val uuid: String? = null,
+) {
+    override fun toString(): String {
+        return "User(id=$idadmin,username=$username,password=$password,role=$role)"
+    }
+}
+
+

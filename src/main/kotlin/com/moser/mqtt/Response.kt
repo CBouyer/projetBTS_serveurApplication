@@ -4,32 +4,37 @@ import com.google.gson.annotations.SerializedName
 
 data class Response(
 
-	@field:SerializedName("correlation_ids")
-	val correlationIds: List<String?>? = null,
+//	@field:SerializedName("correlation_ids")
+//	val correlationIds: List<String?>? = null,
+//
+//	@field:SerializedName("unique_id")
+//	val uniqueId: String? = null,
+//
+//	@field:SerializedName("data")
+//	val data: Data? = null,
+//
+//	@field:SerializedName("visibility")
+//	val visibility: Visibility? = null,
+//
+//	@field:SerializedName("identifiers")
+//	val identifiers: List<IdentifiersItem?>? = null,
+//
+//	@field:SerializedName("origin")
+//	val origin: String? = null,
+//
+//	@field:SerializedName("name")
+//	val name: String? = null,
+//
+//	@field:SerializedName("context")
+//	val context: Context? = null,
+//
+//	@field:SerializedName("time")
+//	val time: String? = null
 
-	@field:SerializedName("unique_id")
-	val uniqueId: String? = null,
-
-	@field:SerializedName("data")
-	val data: Data? = null,
-
-	@field:SerializedName("visibility")
-	val visibility: Visibility? = null,
-
-	@field:SerializedName("identifiers")
-	val identifiers: List<IdentifiersItem?>? = null,
-
-	@field:SerializedName("origin")
-	val origin: String? = null,
-
-	@field:SerializedName("name")
-	val name: String? = null,
-
-	@field:SerializedName("context")
-	val context: Context? = null,
-
-	@field:SerializedName("time")
-	val time: String? = null
+	@SerializedName("end_device_ids") val endDeviceIds: EndDeviceIds? = null,
+	@SerializedName("correlation_ids") val correlationIds: List<String?>? = null,
+	@SerializedName("received_at") val receivedAt: String? = null,
+	@SerializedName("uplink_message") val uplinkMessage: UplinkMessage? = null // ✅ Corrigé !
 )
 
 data class ApplicationIds(

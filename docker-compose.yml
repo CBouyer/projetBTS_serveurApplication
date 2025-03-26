@@ -1,11 +1,42 @@
-version: "3.1"
 
 services:
-  web:
-    container_name: textProd
-    image: nginx
-    volumes:
-      - ./build:/usr/share/nginx/html:ro
-      - ./nginx:/etc/nginx/conf.d:ro
+  # Service pour MySQL
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
     ports:
-      - "8000:80"
+      - "3306:3306"
+    volumes:
+      - ./application_serveurweb.sql:/docker-entrypoint-initdb.d/application_serveurweb.sql
+      - db_data:/var/lib/mysql  # Volume pour persister les données de MySQL
+    networks:
+      - mynetwork
+    deploy:
+        mode: global  # Déploiement global pour le conteneur MySQL
+
+  # Service pour l'application Java
+  app:
+    build:
+      context: .  # Contexte de build (le dossier courant)
+      dockerfile: Dockerfile
+    container_name: ktor-all-container
+    volumes:
+      - ./app:/app  # Lier le dossier `app` local au conteneur
+    command: java -jar /app/ktor-all.jar  # Exécution de l'application Java
+    depends_on:
+      - mysql  # L'application dépend de MySQL, donc elle attend que le conteneur MySQL soit prêt
+    ports:
+      - "8080:8080"  # Port pour exposer l'application Java
+    networks:
+      - mynetwork
+
+# Volumes définis pour la persistance des données
+volumes:
+  db_data:
+
+networks:
+  mynetwork:
+    driver: bridge

@@ -1,14 +1,13 @@
 package com.example.retrofit.models
 
-data class Etudiant(
-    val id:Int?=null,
-    val firstname:String?=null,
-    val lastname:String?=null,
-    val age:String?=null,
-    val image:String?=null
+data class Utilisateurs(
+    val id_user:Int?=null,
+    val username:String?=null,
+    val password:String?=null,
 ) {
+
     override fun toString(): String {
-        return "Etudiant(id=$id,firstname=$firstname, lastname=$lastname, age=$age, image=$image)"
+        return "Utilisateurs(id=$id_user,username=$username,password=$password)"
     }
 }
 

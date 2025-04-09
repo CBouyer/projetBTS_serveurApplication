@@ -1,11 +1,8 @@
 package com.moser
 
 import com.moser.mqtt.MQTT
-import com.moser.plugins.configureAuthentication
-import com.moser.plugins.configureCors
-import com.moser.plugins.configureRouting
-import com.moser.plugins.configureSerialization
-import com.moser.plugins.configureTemplating
+import com.moser.plugins.*
+import io.ktor.client.plugins.websocket.*
 import io.ktor.server.application.*
 import kotlinx.coroutines.runBlocking
 
@@ -15,9 +12,11 @@ fun main(args: Array<String>) {
         mqtt.connect() // Connexion au broker MQTT
     }
     io.ktor.server.netty.EngineMain.main(args)
+
 }
 
 fun Application.module() {
+    configureSocket()
     configureCors()
     configureAuthentication()
     configureSerialization()

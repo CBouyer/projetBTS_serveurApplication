@@ -36,6 +36,8 @@ dependencies {
     implementation("io.ktor:ktor-server-cors-jvm")
     implementation("com.hivemq:hivemq-mqtt-client:1.3.5")
     implementation ("com.google.code.gson:gson:2.12.1")
+    implementation("io.ktor:ktor-server-websockets-jvm:2.2.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:2.3.7")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

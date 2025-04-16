@@ -82,8 +82,8 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Listage des données de la table application_serveurweb.user : ~2 rows (environ)
 DELETE FROM `user`;
-INSERT INTO `user` (`id_user`, `role`, `username`, `password`,`uuid`) VALUES
-    (4, 'user', 'Testuser07!', 'azerty');
+INSERT INTO `user` (`id_user`, `username`, `password`, `role`) VALUES
+    (2, 'user', 'Testuser07!', 'user');
 
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;

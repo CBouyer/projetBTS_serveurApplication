@@ -1,99 +1,106 @@
-package com.serveur.bdd_MySql
-
 import com.example.retrofit.models.Utilisateurs
 import com.moser.models.User
-import com.moser.models.UserCredentials
+import com.serveur.bdd_MySql.Connexion
 
-
-class Gestion() {
-    var laConnexion = Connexion("jdbc:mysql://127.0.0.1/application_serveurweb", "root", "root")
-    //pour docker
-    //var laConnexion = Connexion("jdbc:mysql://mysql/application_serveurweb", "root", "root")
-
+class Gestion {
+    private val laConnexion = Connexion("jdbc:mysql://127.0.0.1/application_serveurweb", "root", "root")
+    // Pour Docker :
+    // private val laConnexion = Connexion("jdbc:mysql://mysql/application_serveurweb", "root", "root")
 
     fun lireUser(): ArrayList<Utilisateurs> {
-        var arLesUtilisateurs = ArrayList<Utilisateurs>()
-        var prepStatement = laConnexion.getConnexion()
-            .prepareStatement("SELECT * from application_serveurweb.info")
-        var rs = prepStatement.executeQuery()
+        val arLesUtilisateurs = ArrayList<Utilisateurs>()
+        val prepStatement = laConnexion.getConnexion()
+            .prepareStatement("SELECT * FROM application_serveurweb.info")
+        val rs = prepStatement.executeQuery()
         while (rs.next()) {
-            arLesUtilisateurs.add(Utilisateurs(rs.getInt("idadmin"),
-                rs.getString("username"),
-            ))
+            arLesUtilisateurs.add(Utilisateurs(rs.getInt("id"), rs.getString("username")))
         }
         return arLesUtilisateurs
     }
 
     fun ajoutUtilisateur(utilisateurs: Utilisateurs): Int {
-         var prepStatement = laConnexion.getConnexion()
-            .prepareStatement("insert into application_serveurweb.user (username,password) VALUES (?,?) ")
-        prepStatement.setString(1,utilisateurs.username)
-        prepStatement.setString(2,utilisateurs.password)
+        val prepStatement = laConnexion.getConnexion()
+            .prepareStatement("INSERT INTO application_serveurweb.user (username,password,role) VALUES (?,?)")
+        prepStatement.setString(1, utilisateurs.username)
+        prepStatement.setString(2, utilisateurs.password)
+        prepStatement.setString(3, utilisateurs.role)
         return prepStatement.executeUpdate()
     }
 
-    fun supprimerUnEtudiant(id:Int):Int{
-        var prepStatement = laConnexion.getConnexion()
-            .prepareStatement("delete from application_serveurweb.user where id_user=?")
-        prepStatement.setInt(1,id)
+    fun supprimerUnEtudiant(id: Int): Int {
+        val prepStatement = laConnexion.getConnexion()
+            .prepareStatement("DELETE FROM application_serveurweb.user WHERE id_user=?")
+        prepStatement.setInt(1, id)
         return prepStatement.executeUpdate()
     }
 
     fun lireUnUser(id: String): Utilisateurs {
-        var utilisateurs = Utilisateurs()
-        var prepStatement = laConnexion.getConnexion()
-            .prepareStatement("select * from application_serveurweb.user where id_user=?")
-        prepStatement.setString(1,id)
-        var rs = prepStatement.executeQuery()
+        var utilisateur = Utilisateurs()
+        val prepStatement = laConnexion.getConnexion()
+            .prepareStatement("SELECT * FROM application_serveurweb.user WHERE id_user=?")
+        prepStatement.setString(1, id)
+        val rs = prepStatement.executeQuery()
         while (rs.next()) {
-            utilisateurs=(Utilisateurs(rs.getInt("id_user"),
-                rs.getString("username"),
-            ))
+            utilisateur = Utilisateurs(rs.getInt("id_user"), rs.getString("username"))
         }
-        return utilisateurs
+        return utilisateur
     }
 
-    fun userExist(username: String, password: String): User {
-        var user = User()
-        var prepStatement = laConnexion.getConnexion()
-            .prepareStatement("SELECT * from application_serveurweb.admin WHERE username=? AND password=?")
+    fun userExist(username: String, password: String): User? {
+        val conn = laConnexion.getConnexion()
+
+        // Vérifie d'abord dans la table admin
+        var prepStatement = conn.prepareStatement(
+            "SELECT * FROM application_serveurweb.admin WHERE username=? AND password=?"
+        )
         prepStatement.setString(1, username)
         prepStatement.setString(2, password)
         var rs = prepStatement.executeQuery()
-        while (rs.next()) {
-            user = User(
-                rs.getInt("idadmin"),
-                rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("role"),
+        if (rs.next()) {
+            return User(
+                idadmin = rs.getInt("idadmin"),
+                username = rs.getString("username"),
+                password = rs.getString("password"),
+                role = rs.getString("role")
             )
         }
-        return user
+
+        // Sinon, vérifie dans la table user
+        prepStatement = conn.prepareStatement(
+            "SELECT * FROM application_serveurweb.user WHERE username=? AND password=?"
+        )
+        prepStatement.setString(1, username)
+        prepStatement.setString(2, password)
+        rs = prepStatement.executeQuery()
+        if (rs.next()) {
+            return User(
+                idadmin = rs.getInt("id_user"),
+                username = rs.getString("username"),
+                password = rs.getString("password"),
+                role = rs.getString("role")
+            )
+        }
+
+        return null
     }
 
     fun lireRefreshTokenUUID(id_user: Int): String? {
-        var prepStatement = laConnexion.getConnexion()
-            .prepareStatement("SELECT * from application_serveurweb.user WHERE id_user=?")
+        val prepStatement = laConnexion.getConnexion()
+            .prepareStatement("SELECT * FROM application_serveurweb.user WHERE id_user=?")
         prepStatement.setInt(1, id_user)
-        var rs = prepStatement.executeQuery()
-        var user: User? = null
-        while (rs.next()) {
-            user = User(
-                rs.getInt("id_user"),
-                rs.getString("role"),
-                rs.getString("username"),
-                rs.getString("password"),
-                rs.getString("uuid")
-            )
+        val rs = prepStatement.executeQuery()
+        var uuid: String? = null
+        if (rs.next()) {
+            uuid = rs.getString("uuid")
         }
-        return user?.uuid
+        return uuid
     }
 
-    fun ecrireRefreshTokenUUID(id_user: Int, uuid: String)  {
-        var prepStatement = laConnexion.getConnexion()
+    fun ecrireRefreshTokenUUID(id_user: Int, uuid: String) {
+        val prepStatement = laConnexion.getConnexion()
             .prepareStatement("UPDATE application_serveurweb.user SET uuid = ? WHERE id_user = ?")
         prepStatement.setString(1, uuid)
         prepStatement.setInt(2, id_user)
-        var rs = prepStatement.executeUpdate()
+        prepStatement.executeUpdate()
     }
 }

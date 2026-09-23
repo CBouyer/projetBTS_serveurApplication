@@ -46,7 +46,6 @@ Capteurs ──► The Things Network ──► Serveur Ktor (ce dépôt) ◄─
 |---------|---------|
 | `src/` | Code source du serveur |
 | `db/` | Fichiers liés à la base de données |
-| `app/` | Emplacement du JAR exécutable utilisé par Docker |
 | `application_serveurweb.sql` | Script de création et d'initialisation de la base |
 | `Dockerfile` / `docker-compose.yml` | Configuration Docker |
 

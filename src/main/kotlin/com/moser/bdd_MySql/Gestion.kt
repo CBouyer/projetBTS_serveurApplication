@@ -3,9 +3,9 @@ import com.moser.models.User
 import com.serveur.bdd_MySql.Connexion
 
 class Gestion {
-    private val laConnexion = Connexion("jdbc:mysql://127.0.0.1/application_serveurweb", "root", "root")
-    // Pour Docker :
-    // private val laConnexion = Connexion("jdbc:mysql://mysql/application_serveurweb", "root", "root")
+       private val laConnexion = Connexion(
+        System.getenv("DB_URL") ?: "jdbc:mysql://127.0.0.1/application_serveurweb", "root", "root"
+    )
 
     fun lireUser(): ArrayList<Utilisateurs> {
         val arLesUtilisateurs = ArrayList<Utilisateurs>()

@@ -23,6 +23,10 @@ services:
       context: .  # Contexte de build (le dossier courant)
       dockerfile: Dockerfile
     container_name: ktor-all-container
+    env_file:
+      - .env
+    environment:
+      DB_URL: "jdbc:mysql://mysql/application_serveurweb"
     volumes:
       - ./app:/app  # Lier le dossier `app` local au conteneur
     command: java -jar /app/ktor-all.jar  # Exécution de l'application Java

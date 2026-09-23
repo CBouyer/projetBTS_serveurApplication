@@ -96,4 +96,4 @@ Si le démarrage réussit, le serveur répond sur `http://localhost:8080`.
 
 ## 💬 À propos
 
-Ce serveur a été réalisé dans le cadre de mon projet de fin d'année de BTS, en tant qu'exercice d'apprentissage. Si vous souhaitez en discuter, n'hésitez pas à me contacter par mail : **ton.email@exemple.com**
+Ce serveur a été réalisé dans le cadre de mon projet de fin d'année de BTS, en tant qu'exercice d'apprentissage. Si vous souhaitez en discuter, n'hésitez pas à me contacter par mail : **corentinbouyer456@gmail.com**

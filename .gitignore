@@ -37,3 +37,4 @@ out/
 
 ### Secrets ###
 .env
+app/*.jar

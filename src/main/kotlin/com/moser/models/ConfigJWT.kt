@@ -2,8 +2,8 @@ package com.moser.models
 
 import com.auth0.jwt.algorithms.Algorithm
 
-var mySecret = "secretAstier"
-var mySecretRefreshToken = "~6\\r?6BQ2^-kM!dk_(be4A/Xh`9L{7~v"
+var mySecret = System.getenv("JWT_SECRET") ?: error("Variable JWT_SECRET manquante")
+var mySecretRefreshToken = System.getenv("JWT_REFRESH_SECRET") ?: error("Variable JWT_REFRESH_SECRET manquante")
 var myIssuer = "http://0.0.0.0:8080/"
 var myAudience = "http://0.0.0.0:8080/hello"
 var myRealm = "Serveur d'application"

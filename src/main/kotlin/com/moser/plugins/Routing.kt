@@ -30,9 +30,6 @@ fun Application.configureRouting() {
             val username = credentials.username
             val password = credentials.password
 
-            println("username = $username")
-            println("password = $password")
-
             val user = maGestion.userExist(username, password)
 
             if (user == null) {
@@ -50,10 +47,7 @@ fun Application.configureRouting() {
             val decodedJWT = tokenManager.verifyJWTTokenRefreshToken().verify(refreshToken)
             val idUser = decodedJWT.getClaim("id_user").asInt()
             val uuid = decodedJWT.getClaim("uuid").asString()
-
-            println("AccessToken = ${accessToken.token}")
-            println("RefreshToken = $refreshToken")
-
+            
             call.response.cookies.append(
                 Cookie(
                     name = "refreshToken",
@@ -76,7 +70,7 @@ fun Application.configureRouting() {
             get("/all") {
                 val allUtilisateurs = maGestion.lireUser()
                 if (allUtilisateurs.isNotEmpty()) {
-                    call.respond(HttpStatusCode.OK, allUtilisateurs)
+                      call.respond(HttpStatusCode.OK, allUtilisateurs.map { it.copy(password = null) })
                 } else {
                     call.respond(HttpStatusCode.NoContent)
                 }

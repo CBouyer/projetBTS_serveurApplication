@@ -36,6 +36,9 @@ Capteurs ──► The Things Network ──► Serveur Ktor (ce dépôt) ◄─
 | MySQL | Base de données |
 | Docker / Docker Compose | Conteneurisation du serveur et de la base |
 | Gradle | Build du projet |
+| JWT (access + refresh token) | Authentification, refresh token en cookie httpOnly |
+| MQTT sur TLS (HiveMQ client) | Réception des données capteurs depuis TTN |
+| WebSocket | Envoi des données en temps réel au site web |
 
 ## 📁 Structure du dépôt
 
@@ -46,6 +49,15 @@ Capteurs ──► The Things Network ──► Serveur Ktor (ce dépôt) ◄─
 | `app/` | Emplacement du JAR exécutable utilisé par Docker |
 | `application_serveurweb.sql` | Script de création et d'initialisation de la base |
 | `Dockerfile` / `docker-compose.yml` | Configuration Docker |
+
+## 🔐 Configuration
+
+Les secrets ne sont pas stockés dans le code. Copier `.env.example` en `.env` et renseigner :
+
+- `TTN_API_KEY` : clé API de l'application The Things Network
+- `JWT_SECRET` / `JWT_REFRESH_SECRET` : chaînes aléatoires longues
+
+Les identifiants MySQL `root/root` sont réservés au développement local.
 
 ## 🚀 Lancement
 
@@ -86,14 +98,19 @@ Si le démarrage réussit, le serveur répond sur `http://localhost:8080`.
 
 ## 🔌 Routes de l'API
 
-<!-- À compléter avec tes routes réelles, par exemple : -->
+| Méthode | Route | Accès | Description |
+|---------|-------|-------|-------------|
+| `POST` | `/login` | Public | Authentification : renvoie un access token JWT et place un refresh token dans un cookie httpOnly |
+| `GET` | `/dashboard` | JWT | Tableau de bord (template FreeMarker) |
+| `GET` | `/all` | JWT | Liste des utilisateurs (sans mots de passe) |
+| `WS` | `/ws` | — | WebSocket : envoi des données capteurs en temps réel |
 
-| Méthode | Route | Description |
-|---------|-------|-------------|
-| `POST` | `/login` | Connexion d'un utilisateur |
-| `GET` | `/capteurs` | Liste des capteurs de l'utilisateur |
-| `GET` | `/capteurs/{id}` | Données de consommation d'un capteur |
+## 🔭 Pistes d'amélioration
 
-## 💬 À propos
+- Hachage des mots de passe (BCrypt)
+- Tests automatisés des routes
+- Gestion d'erreurs centralisée
+
+## 💬 Contact
 
 Ce serveur a été réalisé dans le cadre de mon projet de fin d'année de BTS, en tant qu'exercice d'apprentissage. Si vous souhaitez en discuter, n'hésitez pas à me contacter par mail : **corentinbouyer456@gmail.com**
